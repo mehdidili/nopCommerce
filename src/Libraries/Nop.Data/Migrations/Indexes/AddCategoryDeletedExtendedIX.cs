@@ -4,7 +4,7 @@ using Nop.Core.Domain.Catalog;
 
 namespace Nop.Data.Migrations.Indexes
 {
-    [NopMigration("2020/03/13 12:02:35:9280395")]
+    [NopMigration("2020/03/13 12:02:35:9280395",  MigrationTarget = MigrationTarget.Schema)]
     public class AddCategoryDeletedExtendedIX : AutoReversingMigration
     {
         #region Methods         

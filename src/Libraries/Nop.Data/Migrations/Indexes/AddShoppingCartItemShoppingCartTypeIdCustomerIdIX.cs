@@ -3,7 +3,7 @@ using Nop.Core.Domain.Orders;
 
 namespace Nop.Data.Migrations.Indexes
 {
-    [NopMigration("2020/03/13 09:36:08:9037691")]
+    [NopMigration("2020/03/13 09:36:08:9037691",  MigrationTarget = MigrationTarget.Schema)]
     public class AddShoppingCartItemShoppingCartTypeIdCustomerIdIX : AutoReversingMigration
     {
         #region Methods          

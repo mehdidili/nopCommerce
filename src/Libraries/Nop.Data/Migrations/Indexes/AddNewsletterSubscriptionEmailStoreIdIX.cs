@@ -3,7 +3,7 @@ using Nop.Core.Domain.Messages;
 
 namespace Nop.Data.Migrations.Indexes
 {
-    [NopMigration("2020/03/13 09:36:08:9037690")]
+    [NopMigration("2020/03/13 09:36:08:9037690",  MigrationTarget = MigrationTarget.Schema)]
     public class AddNewsletterSubscriptionEmailStoreIdIX : AutoReversingMigration
     {
         #region Methods          

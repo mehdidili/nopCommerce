@@ -3,7 +3,7 @@ using Nop.Core.Domain.Security;
 
 namespace Nop.Data.Migrations.Indexes
 {
-    [NopMigration("2020/03/13 11:35:09:1647929")]
+    [NopMigration("2020/03/13 11:35:09:1647929",  MigrationTarget = MigrationTarget.Schema)]
     public class AddAclRecordEntityIdEntityNameIX : AutoReversingMigration
     {
         #region Methods

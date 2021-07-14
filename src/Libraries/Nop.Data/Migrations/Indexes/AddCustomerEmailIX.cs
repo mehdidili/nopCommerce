@@ -3,7 +3,7 @@ using Nop.Core.Domain.Customers;
 
 namespace Nop.Data.Migrations.Indexes
 {
-    [NopMigration("2020/03/13 09:36:08:9037681")]
+    [NopMigration("2020/03/13 09:36:08:9037681",  MigrationTarget = MigrationTarget.Schema)]
     public class AddCustomerEmailIX : AutoReversingMigration
     {
         #region Methods   

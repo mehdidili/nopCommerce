@@ -52,15 +52,33 @@ namespace Nop.Data.Migrations
         #region Utils
 
         /// <summary>
-        /// Returns the instances for found types implementing FluentMigrator.IMigration
+        /// Get information for found unapplied migrations
         /// </summary>
-        /// <param name="assembly"></param>
+        /// <param name="assembly">Assembly to find migrations</param>
+        /// <param name="migrationProcessType">Type of migration process; pass null to load all migrations</param>
         /// <returns>The instances for found types implementing FluentMigrator.IMigration</returns>
-        private IEnumerable<IMigrationInfo> GetMigrations(Assembly assembly)
+        private IEnumerable<IMigrationInfo> GetMigrations(Assembly assembly,
+            MigrationProcessType? migrationProcessType = null)
         {
-            var migrations = _filteringMigrationSource.GetMigrations(t => assembly == null || t.Assembly == assembly) ?? Enumerable.Empty<IMigration>();
+            var migrations = _filteringMigrationSource
+                .GetMigrations(t =>
+                {
+                    var migrationAttribute = t.GetCustomAttribute<NopMigrationAttribute>();
 
-            return migrations.Select(m => _migrationRunnerConventions.GetMigrationInfoForMigration(m)).OrderBy(migration => migration.Version);
+                    if (migrationAttribute is null)
+                        return false;
+
+                    if(_versionLoader.Value.VersionInfo.HasAppliedMigration(migrationAttribute.Version))
+                        return false;
+
+                    return (assembly == null || t.Assembly == assembly) &&
+                        (migrationProcessType == null || migrationAttribute.MigrationProcessType == migrationProcessType);
+                }) ?? Enumerable.Empty<IMigration>();
+
+            return migrations
+                .Select(m => _migrationRunnerConventions.GetMigrationInfoForMigration(m))
+                .OrderBy(m => m.Migration.GetType().GetCustomAttribute<NopMigrationAttribute>().MigrationTarget)
+                .ThenBy(migration => migration.Version);
         }
 
         #endregion
@@ -68,46 +86,45 @@ namespace Nop.Data.Migrations
         #region Methods
 
         /// <summary>
-        /// Executes all found (and unapplied) migrations
+        /// Executes an Up for all found unapplied migrations
         /// </summary>
-        /// <param name="assembly">Assembly to find the migration</param>
-        /// <param name="isUpdateProcess">Indicates whether the upgrade or installation process is ongoing. True - if an upgrade process</param>
-        public void ApplyUpMigrations(Assembly assembly, bool isUpdateProcess = false)
+        /// <param name="assembly">Assembly to find migrations</param>
+        /// <param name="migrationProcessType">Type of migration process</param>
+        public void ApplyUpMigrations(Assembly assembly,
+            MigrationProcessType migrationProcessType = MigrationProcessType.Install)
         {
-            if(assembly is null)
+            if (assembly is null)
                 throw new ArgumentNullException(nameof(assembly));
 
-            var migrations = GetMigrations(assembly);
-
-            bool needToExecute(IMigrationInfo migrationInfo1)
+            foreach (var migrationInfo in GetMigrations(assembly, migrationProcessType))
             {
-                var skip = migrationInfo1.Migration.GetType().GetCustomAttributes(typeof(SkipMigrationAttribute)).Any() || isUpdateProcess && migrationInfo1.Migration.GetType()
-                    .GetCustomAttributes(typeof(SkipMigrationOnUpdateAttribute)).Any() || !isUpdateProcess && migrationInfo1.Migration.GetType()
-                    .GetCustomAttributes(typeof(SkipMigrationOnInstallAttribute)).Any();
+                _migrationRunner.Up(migrationInfo.Migration);
 
-                return !skip;
+#if DEBUG
+                if (!string.IsNullOrEmpty(migrationInfo.Description) &&
+                    migrationInfo.Description.StartsWith(string.Format(NopMigrationDefaults.UpdateMigrationDescriptionPrefix, NopVersion.FULL_VERSION)))
+                {
+                    continue;
+                }
+#endif
+                _versionLoader.Value
+                    .UpdateVersionInfo(migrationInfo.Version, migrationInfo.Description ?? migrationInfo.Migration.GetType().Name);
             }
-
-            foreach (var migrationInfo in migrations.Where(needToExecute))
-                    _migrationRunner.MigrateUp(migrationInfo.Version);
         }
 
         /// <summary>
-        /// Executes all found (and unapplied) migrations
+        /// Executes a Down for all found applied migrations
         /// </summary>
-        /// <param name="assembly">Assembly to find the migration</param>
-        public void ApplyDownMigrations(Assembly assembly)
+        /// <param name="assembly">Assembly to find migrations</param>
+        /// <param name="migrationProcessType">Type of migration process</param>
+        public void ApplyDownMigrations(Assembly assembly,
+            MigrationProcessType migrationProcessType = MigrationProcessType.Install)
         {
-            if(assembly is null)
+            if (assembly is null)
                 throw new ArgumentNullException(nameof(assembly));
 
-            var migrations = GetMigrations(assembly).Reverse();
-
-            foreach (var migrationInfo in migrations)
+            foreach (var migrationInfo in GetMigrations(assembly).Reverse())
             {
-                if (migrationInfo.Migration.GetType().GetCustomAttributes(typeof(SkipMigrationAttribute)).Any())
-                    continue;
-
                 _migrationRunner.Down(migrationInfo.Migration);
                 _versionLoader.Value.DeleteVersion(migrationInfo.Version);
             }

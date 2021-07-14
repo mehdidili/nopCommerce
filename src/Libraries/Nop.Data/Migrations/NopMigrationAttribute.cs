@@ -14,14 +14,14 @@ namespace Nop.Data.Migrations
             return DateTime.ParseExact(dateTime, NopMigrationDefaults.DateFormats, CultureInfo.InvariantCulture).Ticks;
         }
 
-        private static long GetVersion(string dateTime, UpdateMigrationType migrationType)
+        private static long GetVersion(string dateTime, MigrationTarget migrationType)
         {
             return GetVersion(dateTime) + (int)migrationType;
         }
-        
-        private static string GetDescription(string nopVersion, UpdateMigrationType migrationType)
+
+        private static string GetDescription(string nopVersion, MigrationTarget migrationTarget)
         {
-            return string.Format(NopMigrationDefaults.UpdateMigrationDescription, nopVersion, migrationType.ToString());
+            return string.Format(NopMigrationDefaults.UpdateMigrationDescription, nopVersion, migrationTarget.ToString());
         }
 
         /// <summary>
@@ -48,10 +48,15 @@ namespace Nop.Data.Migrations
         /// </summary>
         /// <param name="dateTime">The migration date time string to convert on version</param>
         /// <param name="nopVersion">nopCommerce full version</param>
-        /// <param name="migrationType">The migration type</param>
-        public NopMigrationAttribute(string dateTime, string nopVersion, UpdateMigrationType migrationType) :
-            base(GetVersion(dateTime, migrationType), GetDescription(nopVersion, migrationType))
+        /// <param name="migrationTarget">The migration type</param>
+        public NopMigrationAttribute(string dateTime, string nopVersion, MigrationTarget migrationTarget) :
+            base(GetVersion(dateTime, migrationTarget), GetDescription(nopVersion, migrationTarget))
         {
+            MigrationTarget = migrationTarget;
         }
+
+        public MigrationTarget MigrationTarget { get; init; }
+
+        public MigrationProcessType MigrationProcessType { get; init; }
     }
 }

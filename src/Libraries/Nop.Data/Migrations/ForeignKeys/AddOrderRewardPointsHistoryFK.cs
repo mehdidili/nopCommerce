@@ -5,7 +5,7 @@ using Nop.Core.Domain.Orders;
 
 namespace Nop.Data.Migrations.Indexes
 {
-    [NopMigration("2020/03/17 11:26:08:9037680")]
+    [NopMigration("2020/03/17 11:26:08:9037680", MigrationTarget = MigrationTarget.Schema)]
     public class AddOrderRewardPointsHistoryFK : AutoReversingMigration
     {
         #region Methods          

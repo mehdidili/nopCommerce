@@ -3,7 +3,7 @@ using Nop.Core.Domain.Seo;
 
 namespace Nop.Data.Migrations.Indexes
 {
-    [NopMigration("2020/03/13 11:35:09:1647927")]
+    [NopMigration("2020/03/13 11:35:09:1647927",  MigrationTarget = MigrationTarget.Schema)]
     public class AddUrlRecordSlugIX : AutoReversingMigration
     {
         #region Methods

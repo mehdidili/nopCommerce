@@ -4,7 +4,7 @@ using Nop.Data.Mapping;
 
 namespace Nop.Data.Migrations.Indexes
 {
-    [NopMigration("2020/03/13 09:36:08:9037701")]
+    [NopMigration("2020/03/13 09:36:08:9037701",  MigrationTarget = MigrationTarget.Schema)]
     public class AddForumsSubscriptionTopicIdIX : AutoReversingMigration
     {
         #region Methods          

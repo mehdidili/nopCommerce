@@ -75,6 +75,7 @@ using Nop.Services.Vendors;
 using Nop.Web.Areas.Admin.Factories;
 using Nop.Web.Framework;
 using Nop.Web.Framework.Factories;
+using Nop.Web.Framework.Infrastructure.Extensions;
 using Nop.Web.Framework.Models;
 using Nop.Web.Framework.Themes;
 using Nop.Web.Framework.UI;
@@ -467,7 +468,7 @@ namespace Nop.Tests
 
             _serviceProvider = services.BuildServiceProvider();
 
-            EngineContext.Replace(new NopTestEngine(_serviceProvider));
+            EngineContext.Create(_serviceProvider);
 
             _serviceProvider.GetService<INopDataProvider>().CreateDatabase(null);
             _serviceProvider.GetService<INopDataProvider>().InitializeDatabase();
@@ -518,18 +519,6 @@ namespace Nop.Tests
             public NopTestConventionSet(INopDataProvider dataProvider) : base(dataProvider)
             {
             }
-        }
-
-        public partial class NopTestEngine : NopEngine
-        {
-            protected readonly IServiceProvider _internalServiceProvider;
-
-            public NopTestEngine(IServiceProvider serviceProvider)
-            {
-                _internalServiceProvider = serviceProvider;
-            }
-
-            public override IServiceProvider ServiceProvider => _internalServiceProvider;
         }
 
         public class TestAuthenticationService : IAuthenticationService

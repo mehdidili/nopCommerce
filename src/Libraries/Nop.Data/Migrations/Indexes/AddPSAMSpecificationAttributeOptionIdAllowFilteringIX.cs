@@ -5,7 +5,7 @@ using Nop.Data.Mapping;
 
 namespace Nop.Data.Migrations.Indexes
 {
-    [NopMigration("2020/03/13 12:02:35:9280392")]
+    [NopMigration("2020/03/13 12:02:35:9280392",  MigrationTarget = MigrationTarget.Schema)]
     public class AddPSAMSpecificationAttributeOptionIdAllowFilteringIX : AutoReversingMigration
     {
         #region Methods          

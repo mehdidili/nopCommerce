@@ -47,13 +47,18 @@ namespace Nop.Web.Framework.Infrastructure.Extensions
             EngineContext.Current.ConfigureRequestPipeline(application);
         }
 
-        public static void StartEngine(this IApplicationBuilder application)
+        public static void StartEngine(this IEngine engine)
         {
-            var engine = EngineContext.Current;
-
             //further actions are performed only when the database is installed
             if (DataSettingsManager.IsDatabaseInstalled())
             {
+                //update nopCommerce core and db first
+                var migrationManager = engine.Resolve<IMigrationManager>();
+                var assembly = Assembly.GetAssembly(typeof(IMigrationManager));
+                migrationManager.ApplyUpMigrations(assembly, MigrationProcessType.Update);
+                assembly = Assembly.GetAssembly(typeof(ApplicationBuilderExtensions));
+                migrationManager.ApplyUpMigrations(assembly, MigrationProcessType.Update);
+
                 //initialize and start schedule tasks
                 Services.Tasks.TaskManager.Instance.Initialize();
                 Services.Tasks.TaskManager.Instance.Start();
@@ -65,19 +70,6 @@ namespace Nop.Web.Framework.Infrastructure.Extensions
                 var pluginService = engine.Resolve<IPluginService>();
                 pluginService.InstallPluginsAsync().Wait();
                 pluginService.UpdatePluginsAsync().Wait();
-
-                //update nopCommerce core and db
-                var migrationManager = engine.Resolve<IMigrationManager>();
-                var assembly = Assembly.GetAssembly(typeof(ApplicationBuilderExtensions));
-                migrationManager.ApplyUpMigrations(assembly, true);
-                assembly = Assembly.GetAssembly(typeof(IMigrationManager));
-                migrationManager.ApplyUpMigrations(assembly, true);
-
-#if DEBUG
-                //prevent save the update migrations into the DB during the developing process  
-                var versions = EngineContext.Current.Resolve<IRepository<MigrationVersionInfo>>();
-                versions.DeleteAsync(mvi => mvi.Description.StartsWith(string.Format(NopMigrationDefaults.UpdateMigrationDescriptionPrefix, NopVersion.FULL_VERSION)));
-#endif
             }
         }
 

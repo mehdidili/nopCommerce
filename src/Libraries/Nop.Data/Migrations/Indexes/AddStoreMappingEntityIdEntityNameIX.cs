@@ -3,7 +3,7 @@ using Nop.Core.Domain.Stores;
 
 namespace Nop.Data.Migrations.Indexes
 {
-    [NopMigration("2020/03/13 11:35:09:1647930")]
+    [NopMigration("2020/03/13 11:35:09:1647930",  MigrationTarget = MigrationTarget.Schema)]
     public class AddStoreMappingEntityIdEntityNameIX : AutoReversingMigration
     {
         #region Methods

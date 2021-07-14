@@ -4,7 +4,7 @@ using Nop.Core.Domain.Messages;
 
 namespace Nop.Data.Migrations.Indexes
 {
-    [NopMigration("2020/03/13 12:02:35:9280393")]
+    [NopMigration("2020/03/13 12:02:35:9280393",  MigrationTarget = MigrationTarget.Schema)]
     public class AddQueuedEmailSentOnUtcDontSendBeforeDateUtcExtendedIX : AutoReversingMigration
     {
         #region Methods          

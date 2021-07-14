@@ -3,7 +3,7 @@ using Nop.Core.Domain.Directory;
 
 namespace Nop.Data.Migrations.Indexes
 {
-    [NopMigration("2020/03/13 09:36:08:9037708")]
+    [NopMigration("2020/03/13 09:36:08:9037708",  MigrationTarget = MigrationTarget.Schema)]
     public class AddCurrencyDisplayOrderIX : AutoReversingMigration
     {
         #region Methods          

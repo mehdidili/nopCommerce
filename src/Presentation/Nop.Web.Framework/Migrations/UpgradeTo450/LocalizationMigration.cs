@@ -7,8 +7,7 @@ using Nop.Services.Localization;
 
 namespace Nop.Web.Framework.Migrations.UpgradeTo450
 {
-    [NopMigration("2021-04-23 00:00:00", "4.50.0", UpdateMigrationType.Localization)]
-    [SkipMigrationOnInstall]
+    [NopMigration("2021-04-23 00:00:00", "4.50.0", MigrationTarget.Localization, MigrationProcessType = MigrationProcessType.Update)]
     public class LocalizationMigration : MigrationBase
     {
         /// <summary>Collect the UP migration expressions</summary>

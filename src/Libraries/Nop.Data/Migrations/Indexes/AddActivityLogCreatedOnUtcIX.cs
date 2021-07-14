@@ -3,7 +3,7 @@ using Nop.Core.Domain.Logging;
 
 namespace Nop.Data.Migrations.Indexes
 {
-    [NopMigration("2020/03/13 11:35:09:1647926")]
+    [NopMigration("2020/03/13 11:35:09:1647926",  MigrationTarget = MigrationTarget.Schema)]
     public class AddActivityLogCreatedOnUtcIX : AutoReversingMigration
     {
         #region Methods

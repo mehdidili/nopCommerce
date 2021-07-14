@@ -3,7 +3,7 @@ using Nop.Core.Domain.Catalog;
 
 namespace Nop.Data.Migrations.Indexes
 {
-    [NopMigration("2020/03/13 09:36:08:9037693")]
+    [NopMigration("2020/03/13 09:36:08:9037693",  MigrationTarget = MigrationTarget.Schema)]
     public class AddProductAttributeValueProductAttributeMappingIdDisplayOrderIX : AutoReversingMigration
     {
         #region Methods          

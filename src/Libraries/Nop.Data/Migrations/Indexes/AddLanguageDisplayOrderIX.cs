@@ -3,7 +3,7 @@ using Nop.Core.Domain.Localization;
 
 namespace Nop.Data.Migrations.Indexes
 {
-    [NopMigration("2020/03/13 09:36:08:9037689")]
+    [NopMigration("2020/03/13 09:36:08:9037689",  MigrationTarget = MigrationTarget.Schema)]
     public class AddLanguageDisplayOrderIX : AutoReversingMigration
     {
         #region Methods          

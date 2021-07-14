@@ -3,7 +3,7 @@ using Nop.Core.Domain.Orders;
 
 namespace Nop.Data.Migrations.Indexes
 {
-    [NopMigration("2020/03/13 09:36:08:9037688")]
+    [NopMigration("2020/03/13 09:36:08:9037688",  MigrationTarget = MigrationTarget.Schema)]
     public class AddOrderCreatedOnUtcIX : AutoReversingMigration
     {
         #region Methods          

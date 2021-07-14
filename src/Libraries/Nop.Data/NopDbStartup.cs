@@ -30,18 +30,26 @@ namespace Nop.Data
                 .Distinct()
                 .ToArray();
 
+            //data layer
+            services.AddTransient<IDataProviderManager, DataProviderManager>();
+            services.AddTransient(serviceProvider =>
+                serviceProvider.GetRequiredService<IDataProviderManager>().DataProvider);
+
             services
                 // add common FluentMigrator services
                 .AddFluentMigratorCore()
                 .AddScoped<IProcessorAccessor, NopProcessorAccessor>()
                 // set accessor for the connection string
-                .AddScoped<IConnectionStringAccessor>(x => DataSettingsManager.LoadSettings())
+                .AddScoped<IConnectionStringAccessor>(_ => DataSettingsManager.LoadSettings())
                 .AddScoped<IMigrationManager, MigrationManager>()
                 .AddSingleton<IConventionSet, NopConventionSet>()
                 .ConfigureRunner(rb =>
                     rb.WithVersionTable(new MigrationVersionInfo()).AddSqlServer().AddMySql5().AddPostgres()
                         // define the assembly containing the migrations
                         .ScanIn(mAssemblies).For.Migrations());
+
+            //repositories
+            services.AddScoped(typeof(IRepository<>), typeof(EntityRepository<>));
         }
 
         /// <summary>

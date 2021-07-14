@@ -2,7 +2,7 @@
 
 namespace Nop.Data.Migrations.Indexes
 {
-    [NopMigration("2020/03/13 11:35:09:1647939")]
+    [NopMigration("2020/03/13 11:35:09:1647939",  MigrationTarget = MigrationTarget.Schema)]
     public class AddCustomerCustomerRoleMappingCustomerIdIX : AutoReversingMigration
     {
         #region Methods

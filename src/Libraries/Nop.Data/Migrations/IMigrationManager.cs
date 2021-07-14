@@ -11,16 +11,17 @@ namespace Nop.Data.Migrations
     public interface IMigrationManager
     {
         /// <summary>
-        /// Executes all found (and unapplied) migrations
+        /// Executes an Up for all found unapplied migrations
         /// </summary>
-        /// <param name="assembly">Assembly to find the migration</param>
-        /// <param name="isUpdateProcess">Indicates whether the upgrade or installation process is ongoing. True - if an upgrade process</param>
-        void ApplyUpMigrations(Assembly assembly, bool isUpdateProcess = false);
+        /// <param name="assembly">Assembly to find migrations</param>
+        /// <param name="migrationProcessType">Type of migration process</param>
+        void ApplyUpMigrations(Assembly assembly, MigrationProcessType migrationProcessType = MigrationProcessType.Install);
 
         /// <summary>
-        /// Executes an Down migration
+        /// Executes a Down for all found applied migrations
         /// </summary>
-        /// <param name="assembly">Assembly to find the migration</param>
-        void ApplyDownMigrations(Assembly assembly);
+        /// <param name="assembly">Assembly to find migrations</param>
+        /// <param name="migrationProcessType">Type of migration process</param>
+        void ApplyDownMigrations(Assembly assembly, MigrationProcessType migrationProcessType = MigrationProcessType.Install);
     }
 }

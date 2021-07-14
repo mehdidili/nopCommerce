@@ -9,9 +9,8 @@ using Nop.Data.Mapping;
 
 namespace Nop.Data.Migrations.UpgradeTo440
 {
-    [NopMigration("2020-06-10 00:00:00", "4.40.0", UpdateMigrationType.Data)]
-    [SkipMigrationOnInstall]
-    public class DataMigration : Migration
+    [NopMigration("2020-06-10 00:00:00", "4.40.0", MigrationTarget.Data, MigrationProcessType = MigrationProcessType.Update)]
+    public class DataMigration : ForwardOnlyMigration
     {
         private readonly INopDataProvider _dataProvider;
 
@@ -231,11 +230,6 @@ namespace Nop.Data.Migrations.UpgradeTo440
                 Alter.Table(vendorTableName)
                     .AddColumn(manuallyPriceRangeColumnName).AsBoolean().NotNullable().SetExistingRowsTo(false);
             }
-        }
-
-        public override void Down()
-        {
-            //add the downgrade logic if necessary 
         }
     }
 }

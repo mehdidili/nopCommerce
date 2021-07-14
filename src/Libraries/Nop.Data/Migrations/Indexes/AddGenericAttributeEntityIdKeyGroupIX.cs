@@ -3,7 +3,7 @@ using Nop.Core.Domain.Common;
 
 namespace Nop.Data.Migrations.Indexes
 {
-    [NopMigration("2020/03/13 09:36:08:9037686")]
+    [NopMigration("2020/03/13 09:36:08:9037686",  MigrationTarget = MigrationTarget.Schema)]
     public class AddGenericAttributeEntityIdKeyGroupIX : AutoReversingMigration
     {
         #region Methods          

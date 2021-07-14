@@ -2,9 +2,8 @@
 
 namespace Nop.Data.Migrations.UpgradeTo450
 {
-    [NopMigration("2021-04-23 00:00:00", "4.50.0", UpdateMigrationType.Data)]
-    [SkipMigrationOnInstall]
-    public class DataMigration : Migration
+    [NopMigration("2021-04-23 00:00:00", "4.50.0", MigrationTarget.Data, MigrationProcessType = MigrationProcessType.Update)]
+    public class DataMigration : ForwardOnlyMigration
     {
         private readonly INopDataProvider _dataProvider;
 
@@ -18,11 +17,6 @@ namespace Nop.Data.Migrations.UpgradeTo450
         /// </summary>
         public override void Up()
         {
-        }
-
-        public override void Down()
-        {
-            //add the downgrade logic if necessary 
         }
     }
 }
